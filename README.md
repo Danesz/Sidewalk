@@ -2,6 +2,10 @@
 
 Proof-of-concept  [`WKWebview.evaluateJavaScript(...)`](https://developer.apple.com/documentation/webkit/wkwebview/1415017-evaluatejavascript) replacement for WebSocket-based Javascript execution.
 
+
+## Latest version
+[![Github tag](https://badgen.net/github/tag/Danesz/Sidewalk)](https://github.com/Danesz/Sidewalk/tags/)
+
 ## Goals
 - Workaround for a [memory leak in WKWebView](https://bugs.webkit.org/show_bug.cgi?id=215729)
 - Provide a different way for JS <-> Swift communication
@@ -36,7 +40,7 @@ https://github.com/Danesz/SidewalkExample.git
 ```swift
 ...
 dependencies: [
-    .package(url: "https://github.com/Danesz/Sidewalk.git", from: "0.0.1"),
+    .package(url: "https://github.com/Danesz/Sidewalk.git", from: "0.0.2"),
 ],
 ...
 ```
