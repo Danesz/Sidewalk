@@ -30,12 +30,16 @@ class SidewalkJS {
                 logSidewalk("binary frame");
                 logSidewalk("data start");
                 // binary frame
-                const view = new DataView(event.data);
-                logSidewalk(view.getInt32(0));
-
-                //const value = new TextDecoder().decode(new Uint8Array(event.data));
-                //console.log(String.fromCharCode.apply(null, new Uint8Array()));
-                //console.log("value", value)
+                
+                //handle Data as string
+                const value = new TextDecoder().decode(new Uint8Array(event.data));
+                Function('"use strict";' + value )();
+                
+                //handle data differently
+                //const view = new DataView(event.data);
+                //logSidewalk(view.getInt32(0));
+                
+                //override this method, if you want to handle the data differently, not as an executable string 
                 
                 logSidewalk("data end");
             } else {
