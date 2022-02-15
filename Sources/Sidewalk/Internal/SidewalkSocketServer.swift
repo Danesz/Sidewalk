@@ -54,7 +54,7 @@ class SidewalkSocketServer: ServerWebSocketDelegate, ServerDelegate {
     func server(_ server: Server, webSocketDidConnect webSocket: WebSocket, handshake: HTTPRequest) {
         // A web socket connected, you can extract additional information from the handshake request
         print("[SIDEWALK webSocketDidConnect]: ", webSocket.remoteEndpoint?.host, webSocket.remoteEndpoint?.port)
-        webSocket.send(text: "{\"msg\": \"Welcome!\"}")
+        //webSocket.send(text: "{\"msg\": \"Welcome!\"}")
     }
 
     func server(_ server: Server, webSocketDidDisconnect webSocket: WebSocket, error: Error?) {
@@ -68,15 +68,23 @@ class SidewalkSocketServer: ServerWebSocketDelegate, ServerDelegate {
         // One of our web sockets sent us a message
         print("[SIDEWALK didReceiveMessage]: ", message);
         if let payload = message.payload.data {
-            let message = try! JSONDecoder().decode(SidewalkSocketMessage.self, from: payload)
-            print("SIDEWALK didReceiveMessage type:", message.type)
-            if (message.type == "connected") {
+            let inmessage = try! JSONDecoder().decode(SidewalkSocketMessage.self, from: payload)
+            print("SIDEWALK didReceiveMessage type:", inmessage.type)
+            if (inmessage.type == "connected") {
                 let connectedMessage = try! JSONDecoder().decode(SidewalkSocketConnectionMessage.self, from: payload)
                 
                 if let webview = WKWebView.findWebviewById(id: connectedMessage.connectedId) {
                     webview.sidewalkWebsocket = webSocket
+                    //call didRecieve on sidewalkMessageHandler?
+                    //TODO: decide which messages to forward
                 } else {
                     print("[!!! SIDEWALK WEBVIEW IS MISSING FOR ID]: ", connectedMessage.connectedId);
+                }
+            } else {
+                if let webview = WKWebView.findWebviewById(id: inmessage.connectedId) {
+                    webview.sidewalkMessageHandler?.didReceive(message: message, onSocket: webSocket)
+                } else {
+                    print("[!!! SIDEWALK WEBVIEW IS MISSING FOR ID]: ", inmessage.connectedId);
                 }
             }
             
