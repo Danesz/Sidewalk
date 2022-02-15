@@ -53,22 +53,22 @@ extension WKWebView {
     public func sidewalkJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         do {
             if let socket = self.sidewalkWebsocket {
-                self.sidewalkMessageHandler?.send(text: javaScriptString, onSocket: socket)
+                self.sidewalkMessageHandler?.send(text: javaScriptString, onSocket: socket, completionHandler: completionHandler)
             }
         } catch let error {
             completionHandler?(nil, error)
         }
-        completionHandler?("ok", nil) //TODO: return evaluation result
+        //completionHandler?("ok", nil) //TODO: return evaluation result
     }
     
     public func sidewalkJavaScript(_ data: Data, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         do {
             if let socket = self.sidewalkWebsocket {
-                self.sidewalkMessageHandler?.send(data: data, onSocket: socket)
+                self.sidewalkMessageHandler?.send(data: data, onSocket: socket, completionHandler: completionHandler)
             }
         } catch let error {
             completionHandler?(nil, error)
         }
-        completionHandler?("ok", nil) //TODO: return evaluation result
+        //completionHandler?("ok", nil) //TODO: return evaluation result
     }
 }

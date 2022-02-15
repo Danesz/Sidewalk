@@ -14,11 +14,11 @@ class SidewalkSocketMessageHandlerJSON: SidewalkSocketMessageHandler {
         
     }
     
-    func send(data: Data, onSocket socket: WebSocket) {
+    func send(data: Data, onSocket socket: WebSocket, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         fatalError("not supported")
     }
     
-    func send(text: String, onSocket socket: WebSocket) {
+    func send(text: String, onSocket socket: WebSocket, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         do {
             //TODO: check, if base64 is necessary
             let data = try JSONEncoder().encode(SidewalkSocketEvalMessage(evalutation: text.base64))
@@ -28,10 +28,6 @@ class SidewalkSocketMessageHandlerJSON: SidewalkSocketMessageHandler {
         } catch let error {
             print("SidewalkSocketMessageHandlerJSON error", error.localizedDescription)
         }
-    }
-    
-    func send(message: WebSocketMessage, onSocket socket: WebSocket) {
-        fatalError("not supported")
     }
 
 }
