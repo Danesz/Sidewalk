@@ -33,7 +33,15 @@ class SidewalkJS {
                 
                 //handle Data as string
                 const value = new TextDecoder().decode(new Uint8Array(event.data));
-                Function('"use strict";' + value )();
+                const splitted = value.split(/\|@\|(.+)/);
+                
+                if (splitted.length > 1) {
+                    const retval = Function('"use strict";' + splitted[1] )();
+                    this.socket.send(JSON.stringify({"type": "completion", "connectedId": this.sidewalkID, "callbackId": splitted[0] , "retval": retval}));
+                } else {
+                    Function('"use strict";' + splitted[0] )();
+                }
+                
                 
                 //handle data differently
                 //const view = new DataView(event.data);
@@ -45,7 +53,16 @@ class SidewalkJS {
             } else {
                 // text frame
                 logSidewalk("text frame");
-                Function('"use strict";' + atob(event.data) )();
+                
+                //TODO: extract to a method
+                const splitted = event.data.split(/\|@\|(.+)/);
+                
+                if (splitted.length > 1) {
+                    const retval = Function('"use strict";' + atob(splitted[1]) )();
+                    this.socket.send(JSON.stringify({"type": "completion", "connectedId": this.sidewalkID, "callbackId": splitted[0] , "retval": retval}));
+                } else {
+                    Function('"use strict";' + atob(splitted[0]) )();
+                }
             }
 
 
